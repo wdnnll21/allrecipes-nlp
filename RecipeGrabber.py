@@ -25,7 +25,7 @@ def GrabFromRemote(url):
 
     i = 0
     while i < len(steps):
-        steps[i] = steps[i].split(". ")
+        steps[i] = re.split("(?:\. |; |! )",steps[i])
         steps[i][-1].replace(".","")
         i+=1
     

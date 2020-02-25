@@ -13,3 +13,34 @@ class Recipe(object):
         self.nutrition = nutr
         #How long the recipe takes
         self.timing = tim
+    
+    def __repr__(self):
+        return f""" 
+        ** Title: {self.title} **\n
+        ** Ingredients: {self.ingredients} **\n
+        ** Directions: {self.directions} **\n
+        ** Notes: {self.notes} **\n
+        ** Nutrition: {self.nutrition} **\n
+        ** Timing: {self.timing} **\n\n"""
+
+class Action(object):
+    def __init__(self,typ,verb,item,tool,unt,mix):
+        self.act = typ 
+        self.verb = verb
+        self.subj = item
+        self.obj = mix
+        self.tool = tool
+        self.until = unt
+        self.properties = {}
+
+    def happen(self):
+        return 0
+
+
+class Mixture(object):
+    def __init__(self,ingr):
+        self.ingr = [ingr]
+        self.state = "at rest"
+
+    
+
