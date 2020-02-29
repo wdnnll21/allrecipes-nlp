@@ -24,14 +24,15 @@ class Recipe(object):
         ** Timing: {self.timing} **\n\n"""
 
 class Action(object):
-    def __init__(self,typ,verb,item,tool,unt,mix):
+    def __init__(self,typ,verb,doc):
         self.act = typ 
         self.verb = verb
-        self.subj = item
-        self.obj = mix
-        self.tool = tool
-        self.until = unt
-        self.properties = {}
+        self.doc = doc
+        self.subj = None
+        self.ingr = None
+        self.tool = None
+        self.until = None
+        self.properties = None
 
     def happen(self):
         return 0
