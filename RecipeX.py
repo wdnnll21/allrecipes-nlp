@@ -1,5 +1,5 @@
 class Recipe(object):
-    def __init__(self,titl,ing,step,note,nutr,tim,tools):
+    def __init__(self,titl,ing,step,note,nutr,tim):
         super(Recipe,self)
         #List of Ingredients, Including Quantities
         self.ingredients = ing
@@ -13,8 +13,8 @@ class Recipe(object):
         self.nutrition = nutr
         #How long the recipe takes
         self.timing = tim
-        #Tools used in making the recipe
-        self.tools = tools
+        # #Tools used in making the recipe
+        # self.tools = tools
 
     def change_servings(self, multiplier):
         for i in range(len(self.ingredients)):
