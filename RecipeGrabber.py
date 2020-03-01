@@ -25,26 +25,12 @@ def GrabFromRemote(url):
     steps = steps[1:-1].split("@")
     time = steps[0:3]
 
-<<<<<<< HEAD
-    steps_unsaparated = steps[3:]
-    steps_separated = []
-
-    # i = 0
-    for step in steps_unsaparated:
-        for sub_step in step.split(". "):
-            steps_separated.append(sub_step.replace(".", ""))
-        # steps[i] = steps[i].split(". ")
-        # steps[i][-1].replace(".","")
-        # i+=1
-
-=======
     i = 0
     while i < len(steps):
         steps[i] = re.split("(?:\. |; |! )",steps[i])
         steps[i][-1].replace(".","")
         i+=1
-    
->>>>>>> 77c14d2d73ac83a900b0a407374ae0d2b84e6a3e
+
     notesAndNutr = ""
     
     for x in soup.find_all(class_="recipe-footnotes"):
