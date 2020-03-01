@@ -105,6 +105,14 @@ def ActionMachine(recipe):
                         else:
                             act.tools.append(word.text)
                             tools.append(word.text)
+                    for prepphrase in act.preps:
+                        if prepphrase[0].text in ["in","with","into","onto"]:
+                            for prepword in prepphrase:
+                                if prepword.dep_ == "pobj":
+                                    if any([prepword.text in x for x in recipe.ingredients]):
+                                        act.ingrs.append(prepword.text)
+                                    else:
+                                        act.tools.append(word.text)
                 elif act.typ == "Cook":
                     for tool in toolMap:
                         if act.verb.text in toolMap[tool]:
@@ -112,7 +120,34 @@ def ActionMachine(recipe):
                             tools.append(tool)
                     for word in act.objects:
                         if any([word.text in x for x in recipe.ingredients]):
-                            act.ingrs.append(word)
+                            act.ingrs.append(word.text)
+                        else:
+                            tools.append(word.text)
+                    for prepphrase in act.preps:
+                        if prepphrase[0].text in ["in","with","into","onto"]:
+                            for prepword in prepphrase:
+                                if prepword.dep_ == "pobj":
+                                    if any([prepword.text in x for x in recipe.ingredients]):
+                                        act.ingrs.append(prepword.text)
+                                    else:
+                                        act.tools.append(word.text)
+                                        tools.append(word.text)
+                elif act.typ == "Combine":
+                    for word in act.objects:
+                        if any([word.text in x for x in recipe.ingredients]):
+                            act.ingrs.append(word.text)
+                        else:
+                            tools.append(word.text)
+                    for prepphrase in act.preps:
+                        if prepphrase[0].text in ["in","with","into","onto"]:
+                            for prepword in prepphrase:
+                                if prepword.dep_ == "pobj":
+                                    if any([prepword.text in x for x in recipe.ingredients]):
+                                        act.ingrs.append(prepword.text)
+                                    else:
+                                        act.tools.append(prepword.text)
+                                        tools.append(prepword.text)
+
     pm = PrimaryMethod(recipe,actionList)
     return tools
                     
