@@ -13,14 +13,12 @@ class Recipe(object):
         self.nutrition = nutr
         #How long the recipe takes
         self.timing = tim
-<<<<<<< HEAD
         #Tools used in making the recipe
         self.tools = tools
 
     def change_servings(self, multiplier):
         for i in range(len(self.ingredients)):
             self.ingredients[i] = (self.ingredients[i][0]*multiplier, self.ingredients[i][1])
-=======
     
     def __repr__(self):
         return f""" 
@@ -50,7 +48,4 @@ class Mixture(object):
     def __init__(self,ingr):
         self.ingr = [ingr]
         self.state = "at rest"
-
-    
->>>>>>> 77c14d2d73ac83a900b0a407374ae0d2b84e6a3e
 
