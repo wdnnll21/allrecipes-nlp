@@ -2,7 +2,10 @@
 def get_ingredient(ingredient_text):
     quantity = get_quantity(ingredient_text)
     ingredient = ingredient_text[len(str(quantity))-1:] if quantity > 0 else ingredient_text
-    return quantity, ingredient
+    measurement = get_measurement(ingredient)
+    ingredient = ingredient_text[len(
+        str(measurement))-1:] if measurement else ingredient
+    return quantity, measurement, ingredient
 
 
 def get_quantity(ingredient_text):
@@ -23,3 +26,12 @@ def get_quantity(ingredient_text):
         divide = 1
 
     return quantity/divide
+
+def get_measurement(ingredient_text): 
+    params = ["spoon", "pinch", "clove", "cup", "pound", "ounce", "gram", "kg", "lb", "oz"]
+    unit = ingredient_text.split()[0]
+    for word in params: 
+        if word in unit: 
+            return word
+    return None
+

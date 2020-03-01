@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from beautifulsoup4 import BeautifulSoup
 from RecipeX import Recipe
 import html
 import requests
