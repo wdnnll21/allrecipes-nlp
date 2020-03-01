@@ -46,7 +46,7 @@ def GrabFromRemote(url):
 
     nutr = notesAndNutr[notesAndNutr.index("ing:")+4:notesAndNutr.index(".\nFull")].split(";\n")
     tools = get_tools(steps)
-    recipe = Recipe(title,ingredients,steps_separated,notes,nutr,time,tools)
+    recipe = Recipe(title,ingredients,steps,notes,nutr,time,tools)
     #print(recipe.title,recipe.ingredients,recipe.directions,recipe.notes,recipe.nutrition,recipe.timing)
 
     return recipe
