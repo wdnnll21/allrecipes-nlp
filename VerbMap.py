@@ -3,12 +3,12 @@ verbMap = {
                "baste","batter","beat","brush","butterfly","bone","can","chunk","chill","churn","core","clarify","congeal","cream","debone","dice","drain",
                "decorate","descale","devil","dry","ferment","mix","stir","flambe","fold","fillet","freeze","filter","garnish","grind","glaze","grease","hull","juice","julienne",
                "knead","leaven","marinate","mash","macerate","peel","pit","preserve","process","percolate","press","pulp","pare","pickle","prepare","puree","rub","refrigerate",
-               "separate","sieve","sift","skewer","stuff","scoop","shred","souse","steep","skin","soak","sprinkle","strain","toss","thicken","whip","whisk","wash"],
+               "separate","sieve","sift","skewer","stuff","scoop","shred","souse","steep","skin","soak","strain","toss","thicken","whip","whisk","wash"],
     "Cook":["heat","cook","grill", "saute","sauté", "broil", "boil", "poach", "simmer", "bake","melt","fry","braise","blacken","brown","blanch","brew","barbecue","burn",
             "char-broil","coddle","caramelize","deep fry","escallop","fricassee","hard boil","microwave","pan fry","parboil","precook","pre-cook","pressure-cook", "pressure cook",
             "reduce","shirr","smoke","steam","sear","slow cook","stew","tenderize","toast","warm","roast"],
-    "Combine":["add","layer","mix in","stir in","dip","bind","combine","decorate","season","drizzle","flavor","sweeten","salt","spray"],
-    "Wait":["wait","cool"],
+    "Combine":["add","layer","mix in","stir in","dip","bind","combine","decorate","season","drizzle","flavor","sweeten","salt","spray","sprinkle"],
+    "Wait":["wait","cool","let"],
 }
 
 toolMap = {

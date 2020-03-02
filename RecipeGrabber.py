@@ -24,6 +24,7 @@ def GrabFromRemote(url):
     steps = re.sub("[\s]{2,}","",steps)
     steps = steps[1:-1].split("@")
     time = steps[0:3]
+    steps = steps[3:]
 
     i = 0
     while i < len(steps):
