@@ -14,7 +14,9 @@ class Recipe(object):
         #How long the recipe takes
         self.timing = tim
         # #Tools used in making the recipe
-        # self.tools = tools
+        self.tools = None
+        self.steps = None
+        self.pm = None 
 
     def change_servings(self, multiplier):
         for i in range(len(self.ingredients)):

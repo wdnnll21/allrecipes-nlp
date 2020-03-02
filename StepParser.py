@@ -18,12 +18,17 @@ class Phrase(object):
         self.ingrs = []
 
     def __str__(self):
-        return "Method: " + self.verb.text + "; Type: " + self.typ + "; Tools: " + str(self.tools) + "; Ingredients: " + str(self.ingrs)
+        return "Method: " + self.verb.text + "; Type: " + self.typ + "; Tools: " + str(self.tools) + "; Ingredients: " + str(self.ingrs) +"\n\t"+self.getStep()
 
     def getStep(self):
-        objects = ", ".join(self.objects)
-        preps = " ".join(self.preps)
-        return self.verb + objects + preps
+        objects = ", ".join([x.text for x in self.objects])
+        preptext = []
+        for a in self.preps:
+            for b in a:
+                if b not in preptext:
+                    preptext.append(b)
+        preps = " ".join([x.text for x in preptext])
+        return self.verb.text + " " +  objects + " " + preps
 
 class Sentence(object):
     def __init__(self, text):
@@ -77,6 +82,10 @@ class Sentence(object):
                     structures[head.lower_].preps.append([x for x in word.subtree])
         self.doc = a
         self.phrases = list(structures.values())
+
+        for phrase in self.phrases:
+            if len(phrase.objects) == 0 and len(phrase.tools) == 0:
+                self.phrases.remove(phrase)
         
 
 def basicActions(recipe):
@@ -103,7 +112,7 @@ def ActionMachine(recipe):
                             act.tools.append(tool)
                             tools.append(tool)
                     for word in act.objects:
-                        if any([word.text in x for x in recipe.ingredients]):
+                        if any([word.text in x for x.ingredient in recipe.ingredients]):
                             act.ingrs.append(word.text)
                         else:
                             act.tools.append(word.text)
@@ -112,7 +121,7 @@ def ActionMachine(recipe):
                         if prepphrase[0].text in ["in","with","into","onto"]:
                             for prepword in prepphrase:
                                 if prepword.dep_ == "pobj":
-                                    if any([prepword.text in x for x in recipe.ingredients]):
+                                    if any([prepword.text in x for x.ingredient in recipe.ingredients]):
                                         act.ingrs.append(prepword.text)
                                     else:
                                         act.tools.append(word.text)
@@ -122,7 +131,7 @@ def ActionMachine(recipe):
                             act.tools.append(tool)
                             tools.append(tool)
                     for word in act.objects:
-                        if any([word.text in x for x in recipe.ingredients]):
+                        if any([word.text in x for x.ingredient in recipe.ingredients]):
                             act.ingrs.append(word.text)
                         else:
                             tools.append(word.text)
@@ -130,7 +139,7 @@ def ActionMachine(recipe):
                         if prepphrase[0].text in ["in","with","into","onto"]:
                             for prepword in prepphrase:
                                 if prepword.dep_ == "pobj":
-                                    if any([prepword.text in x for x in recipe.ingredients]):
+                                    if any([prepword.text in x for x.ingredient in recipe.ingredients]):
                                         act.ingrs.append(prepword.text)
                                     else:
                                         act.tools.append(word.text)
@@ -156,8 +165,11 @@ def ActionMachine(recipe):
             for act in sentence.phrases:
                 print(act)
 
-    pm = PrimaryMethod(recipe,actionList)
-    return tools
+    recipe.steps = actionList
+    recipe.pm = PrimaryMethod(recipe,actionList)
+    recipe.tools =  tools
+
+    return recipe
                     
 def PrimaryMethod(recipe,actionList):
     titleverbs = re.findall(re.compile("[A-Za-z]*ed"), recipe.title)
