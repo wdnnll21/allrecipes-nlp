@@ -17,6 +17,14 @@ class Phrase(object):
         self.tools = []
         self.ingrs = []
 
+    def __str__(self):
+        return "Method: " + self.verb.text + "; Type: " + self.typ + "; Tools: " + str(self.tools) + "; Ingredients: " + str(self.ingrs)
+
+    def getStep(self):
+        objects = ", ".join(self.objects)
+        preps = " ".join(self.preps)
+        return self.verb + objects + preps
+
 class Sentence(object):
     def __init__(self, text):
         self.text = text
@@ -78,11 +86,6 @@ def basicActions(recipe):
         for sentence in step:
             sbreak.append(Sentence(sentence))
         basic.append(sbreak)          
-    
-    for step in basic:
-        for sentence in step:
-            for act in sentence.phrases:
-                print(act.verb,act.objects,act.preps,act.typ)
 
     return basic
 
@@ -147,6 +150,11 @@ def ActionMachine(recipe):
                                     else:
                                         act.tools.append(prepword.text)
                                         tools.append(prepword.text)
+
+    for step in basic:
+        for sentence in step:
+            for act in sentence.phrases:
+                print(act)
 
     pm = PrimaryMethod(recipe,actionList)
     return tools
