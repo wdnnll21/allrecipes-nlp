@@ -17,8 +17,8 @@ class Recipe(object):
         # self.tools = tools
 
     def change_servings(self, multiplier):
-        for i in range(len(self.ingredients)):
-            self.ingredients[i] = (self.ingredients[i][0]*multiplier, self.ingredients[i][1])
+        for ingredient in self.ingredients:
+            ingredient.multiply_quantity(multiplier)
     
     def __repr__(self):
         return f""" 
