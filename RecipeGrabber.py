@@ -15,7 +15,7 @@ def GrabFromRemote(url):
     ingredients = re.sub("[\n]+","\n",ingredients)
     ingredients = re.sub("(^[\n]|[\n]$|\nAdd all ingredients to list)","",ingredients)
     ingredients = ingredients.split("\n")
-    #ingredients = [get_ingredient(ingredient) for ingredient in ingredients]
+    ingredients = [get_ingredient(ingredient) for ingredient in ingredients]
     
     title = soup.find(id="recipe-main-content").get_text()
 
@@ -58,9 +58,9 @@ def grab_steps(steps):
 rec = GrabFromRemote("https://www.allrecipes.com/recipe/262174")
 
 print([str(ingredient) for ingredient in rec.ingredients])
-rec.change_servings(2)
+#rec.change_servings(2)
 print([str(ingredient) for ingredient in rec.ingredients])
-rec.change_servings(1/8)
+#rec.change_servings(1/8)
 print([str(ingredient) for ingredient in rec.ingredients])
 
 

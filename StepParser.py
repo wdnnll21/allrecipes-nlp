@@ -84,7 +84,9 @@ class Sentence(object):
         self.phrases = list(structures.values())
 
         for phrase in self.phrases:
-            if len(phrase.objects) == 0 and len(phrase.tools) == 0:
+            if len(phrase.objects) == 0 and len(phrase.tools) == 0 and len(phrase.preps) == 0:
+                self.phrases.remove(phrase)
+            elif phrase.verb.lower_ in ["have","is","was","are","can"]:
                 self.phrases.remove(phrase)
         
 
@@ -112,54 +114,43 @@ def ActionMachine(recipe):
                             act.tools.append(tool)
                             tools.append(tool)
                     for word in act.objects:
-                        if any([word.text in x for x.ingredient in recipe.ingredients]):
-                            act.ingrs.append(word.text)
+                        if any([word.lower_ in x.ingredient for x in recipe.ingredients]):
+                            act.ingrs.append(word.lower_)
                         else:
-                            act.tools.append(word.text)
-                            tools.append(word.text)
-                    for prepphrase in act.preps:
-                        if prepphrase[0].text in ["in","with","into","onto"]:
-                            for prepword in prepphrase:
-                                if prepword.dep_ == "pobj":
-                                    if any([prepword.text in x for x.ingredient in recipe.ingredients]):
-                                        act.ingrs.append(prepword.text)
-                                    else:
-                                        act.tools.append(word.text)
+                            act.tools.append(word.lower_)
+                            tools.append(word.lower_)
                 elif act.typ == "Cook":
                     for tool in toolMap:
                         if act.verb.text in toolMap[tool]:
                             act.tools.append(tool)
                             tools.append(tool)
                     for word in act.objects:
-                        if any([word.text in x for x.ingredient in recipe.ingredients]):
-                            act.ingrs.append(word.text)
+                        if any([word.lower_ in x.ingredient for x in recipe.ingredients]):
+                            act.ingrs.append(word.lower_)
                         else:
-                            tools.append(word.text)
-                    for prepphrase in act.preps:
-                        if prepphrase[0].text in ["in","with","into","onto"]:
-                            for prepword in prepphrase:
-                                if prepword.dep_ == "pobj":
-                                    if any([prepword.text in x for x.ingredient in recipe.ingredients]):
-                                        act.ingrs.append(prepword.text)
-                                    else:
-                                        act.tools.append(word.text)
-                                        tools.append(word.text)
+                            act.tools.append(word.lower_)
+                            tools.append(word.lower_)
                 elif act.typ == "Combine":
                     for word in act.objects:
-                        if any([word.text in x for x in recipe.ingredients]):
-                            act.ingrs.append(word.text)
+                        if any([word.lower_ in x.ingredient for x in recipe.ingredients]):
+                            act.ingrs.append(word.lower_)
                         else:
-                            tools.append(word.text)
-                    for prepphrase in act.preps:
-                        if prepphrase[0].text in ["in","with","into","onto"]:
+                            act.tools.append(word.lower_)
+                            tools.append(word.lower_)
+                for prepphrase in act.preps:
+                        if prepphrase[0].text in ["in","with","into","onto","from"]:
                             for prepword in prepphrase:
                                 if prepword.dep_ == "pobj":
-                                    if any([prepword.text in x for x in recipe.ingredients]):
-                                        act.ingrs.append(prepword.text)
+                                    if any([prepword.lower_ in x.ingredient for x in recipe.ingredients]):
+                                        act.ingrs.append(prepword.lower_)
                                     else:
-                                        act.tools.append(prepword.text)
-                                        tools.append(prepword.text)
-
+                                        act.tools.append(prepword.lower_)
+                                        tools.append(prepword.lower_)
+                for wordx in act.verb.subtree:
+                    if len(wordx.lower_) > 2 and wordx.pos_ == "NOUN" and any([wordx.lower_ in x.ingredient for x in recipe.ingredients]):
+                        if wordx.lower_ not in act.ingrs:
+                            act.ingrs.append(wordx.lower_)
+                
     for step in basic:
         for sentence in step:
             for act in sentence.phrases:
