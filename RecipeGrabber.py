@@ -46,7 +46,6 @@ def GrabFromRemote(url):
         notes = re.sub("^@F.*\n","",notes)
 
     nutr = notesAndNutr[notesAndNutr.index("ing:")+4:notesAndNutr.index(".\nFull")].split(";\n")
-    #tools = get_tools(steps)
     recipe = Recipe(title,ingredients,steps,notes,nutr,time)
     #print(recipe.title,recipe.ingredients,recipe.directions,recipe.notes,recipe.nutrition,recipe.timing)
 
@@ -56,12 +55,21 @@ def grab_steps(steps):
 
     return []
 
-rec = GrabFromRemote("https://www.allrecipes.com/recipe/272159")
-print(rec.ingredients)
+rec = GrabFromRemote("https://www.allrecipes.com/recipe/262174")
+
+print([str(ingredient) for ingredient in rec.ingredients])
 rec.change_servings(2)
-print(rec.directions)
-print(rec.ingredients)
-print(rec.notes)
-print(rec.nutrition)
-print(rec.timing)
-print(rec.title)
+print([str(ingredient) for ingredient in rec.ingredients])
+rec.change_servings(1/8)
+print([str(ingredient) for ingredient in rec.ingredients])
+
+
+
+# print(rec.ingredients)
+# rec.change_servings(2)
+# print(rec.directions)
+# print([str(ingredient) for ingredient in rec.ingredients])
+# print(rec.notes)
+# print(rec.nutrition)
+# print(rec.timing)
+# print(rec.title)
