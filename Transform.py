@@ -116,6 +116,9 @@ def ToHealthy(recipe):
     if len(ph.objects) > 0:
         AddAction(recipe,"begin",ph)
 
+    healthy = ["spinach","onion","zucchini","kale","oats","quinoa","green beans","whole cucumber","arugula head"]
+    AddIngredient(Ingrdient(0,"",healthy[randint(0,8)] + "to taste"),"before")
+
     return recipe
 
 def FromHealthy(recipe):
@@ -176,13 +179,26 @@ thaiAdd = [
     (Ingredient(2, "teaspoons", "soy sauce"), "with"),
     (Ingredient(1, "teaspoon", "fish sauce"), "with"),
     (Ingredient(1, "teaspoon", "white sugar"), "with"),
+    (Ingredient(1, "tablespoon", "Serrano chili dust"),"with"),
     (Ingredient(.25, "cup", "very thinly sliced fresh basil leaves"), "end"),
-
+    (Ingredient(1,'cup','rice noodles'),'none')
 ]
 
 def ToThai(recipe):
     for ingredient, timing in thaiAdd:
         AddIngredient(recipe, ingredient, timing)
+    recipe.pm = "stir fry"
+    phb = Phrase("boil")
+    phb.typ = "Cook"
+    phb.ingrs.append("rice noodles")
+    phb.preps.extend([FakePrep("in saucepan over medium heat","NOUN",499)])
+    phb.tools.append("saucepan")
+    phb.objects.append("rice noodles")
+    ph = Phrase("serve")
+    ph.typ = "Wait"
+    ph.ingrs.append("rice noodles")
+    ph.preps.append(FakePrep("over noodles","NOUN",513))
+    return recipe
 
 def ToAsianFusion(recipe):
     pass
