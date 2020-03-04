@@ -50,6 +50,41 @@ vegToMeat = {
     "tvp": "lamb"
 }
 
-toThai = {
+toIndian = {
+    "meat": "lamb",
+    "duck": "chicken",
+    "crab": "tofu",
+    "goose": "chicken",
+    "beef": "lamb",
+    "steak": "lamb",
+    "pork": "lamb",
+    "veal": "chicken",
+    "bacon": "salmon",
+    "sausage": "lamb sausage",
+    "buffalo": "seitan",
+    "bison": "buffalo",
+    "elk": "chicken",
+    "deer": "chicken",
+    "venison": "chicken",
+    "shrimp": "tofu",
+    "salami": "lamb",
+    "pastrami": "lamb",
+    "pepperoni": "buffalo",
+    "ham": "tofu",
+    "hot dog": "chicken sausage",
+    "wurst": "lamb sausage",
+    "prosciutto": "tofu",
+    "spam": "tofu"
+}
 
+changeCookMethod = {
+    "bake": "stir fry",
+    "stir fry": "grill",
+    "boil": "fry",
+    "roast" : "grill",
+    "steam" : "boil",
+    "simmer": "poach",
+    "broil": "boil", 
+    "braising" : "cook and season",
+    "stew" : "boil"
 }
