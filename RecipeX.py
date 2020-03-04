@@ -14,8 +14,8 @@ class Recipe(object):
         #How long the recipe takes
         self.timing = tim
         # #Tools used in making the recipe
-        self.tools = None
-        self.steps = None
+        self.tools = []
+        self.steps = []
         self.pm = None 
 
     def change_servings(self, multiplier):
@@ -23,13 +23,18 @@ class Recipe(object):
             ingredient.multiply_quantity(multiplier)
     
     def __repr__(self):
-        return f""" 
-        ** Title: {self.title} **\n
-        ** Ingredients: {self.ingredients} **\n
-        ** Directions: {self.directions} **\n
-        ** Notes: {self.notes} **\n
-        ** Nutrition: {self.nutrition} **\n
-        ** Timing: {self.timing} **\n\n"""
+        ingreds = "\n".join([str(ing) for ing in self.ingredients])
+        dirs = "\n".join([str(step) for step in self.steps])
+
+        return f"""
+** Title: {self.title} **\n
+** Ingredients: **\n {ingreds} \n
+** Parsed Steps: **\n {dirs} \n
+** Primary Method: {self.pm} **\n
+** Tools: {", ".join(self.tools)} **\n
+** Notes: {", ".join(self.notes)} **\n
+** Timing: {", ".join(self.timing)} **\n\n"""
+
 
 class Action(object):
     def __init__(self,typ,verb,doc):

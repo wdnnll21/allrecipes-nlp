@@ -7,7 +7,7 @@ verbMap = {
     "Cook":["heat","cook","grill", "saute","sauté", "broil", "boil", "poach", "simmer", "bake","melt","fry","braise","blacken","brown","blanch","brew","barbecue","burn",
             "char-broil","coddle","caramelize","deep fry","escallop","fricassee","hard boil","microwave","pan fry","parboil","precook","pre-cook","pressure-cook", "pressure cook",
             "reduce","shirr","smoke","steam","sear","slow cook","stew","tenderize","toast","warm","roast"],
-    "Combine":["add","layer","mix in","stir in","dip","bind","combine","decorate","season","drizzle","flavor","sweeten","salt","spray","sprinkle"],
+    "Combine":["add","layer","mix in","stir in","dip","bind","combine","decorate","season","drizzle","flavor","sweeten","salt","spray","sprinkle","top"],
     "Wait":["wait","cool","let"],
 }
 
