@@ -1,4 +1,4 @@
-from TransformMaps import meatToVeg, vegToMeat
+from TransformMaps import meatToVeg, vegToMeat, toIndian, changeCookMethod
 from StepParser import Phrase, Sentence
 from RecipeX import Recipe
 from ingredients import Ingredient
@@ -154,6 +154,19 @@ def FromHealthy(recipe):
 
     return recipe
     
+def ToAmerican(recipe): 
+    recipe = FromHealthy(recipe)
+    americanAdd = [
+        (Ingredient(1, "ounce", "freedom"), "with"),
+        (Ingredient(100, "gallons", "liberty"), "with"),
+        (Ingredient(1, 'pair', 'of guns'), "with"),
+        (Ingredient(10, "kg" "butter"), "with"),
+    ]
+    for ingredient, timing in americanAdd:
+        AddIngredient(recipe, ingredient, timing)
+    return recipe
+
+
 def DoNothing(recipe):
     return
 
@@ -172,19 +185,17 @@ def HalfIt(recipe):
     recipe.change_servings(1/2)
     return recipe
 
-
-thaiAdd = [
-    (Ingredient(1, "ounce", "peanut"), "with"),
-    (Ingredient(1, "tablespoon", "chicken broth"), "with"),
-    (Ingredient(2, "teaspoons", "soy sauce"), "with"),
-    (Ingredient(1, "teaspoon", "fish sauce"), "with"),
-    (Ingredient(1, "teaspoon", "white sugar"), "with"),
-    (Ingredient(1, "tablespoon", "Serrano chili dust"),"with"),
-    (Ingredient(.25, "cup", "very thinly sliced fresh basil leaves"), "end"),
-    (Ingredient(1,'cup','rice noodles'),'none')
-]
-
 def ToThai(recipe):
+    thaiAdd = [
+      (Ingredient(1, "ounce", "peanut"), "with"),
+      (Ingredient(1, "tablespoon", "chicken broth"), "with"),
+      (Ingredient(2, "teaspoons", "soy sauce"), "with"),
+      (Ingredient(1, "teaspoon", "fish sauce"), "with"),
+      (Ingredient(1, "teaspoon", "white sugar"), "with"),
+      (Ingredient(1, "tablespoon", "Serrano chili dust"),"with"),
+      (Ingredient(.25, "cup", "very thinly sliced fresh basil leaves"), "end"),
+      (Ingredient(1,'cup','rice noodles'),'none')
+    ]
     for ingredient, timing in thaiAdd:
         AddIngredient(recipe, ingredient, timing)
     recipe.pm = "stir fry"
@@ -200,6 +211,33 @@ def ToThai(recipe):
     ph.preps.append(FakePrep("over noodles","NOUN",513))
     return recipe
 
+def ToIndian(recipe): 
+    beef = False
+    for ingredient in recipe.ingredients:
+        for meatReplacement in toIndian:
+            if meatReplacement in ingredient.ingredient:
+                ingrnew = Ingredient(
+                    ingredient.quantity, ingredient.measurement, toIndian[meatReplacement])
+                TransformIngredient(recipe, ingredient, ingrnew)
+                beef = True
+    if not beef:
+        meat = list(toIndian)[randint(0, len(toIndian))]
+        AddIngredient(recipe, Ingredient(4, "ounces", meat), "with")
+    AddIngredient(recipe, Ingredient(1/2, "tablespoon", "curry"))
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "coriander"))
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "cumin"))
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "cayenne"))
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "turmeric"))
+    return recipe
+    
+def randomizeCookMethod(recipe): 
+    for actionold in recipe.steps:
+        if actionold.typ == "Cook":
+            for newCook in changeCookMethod:
+                if newCook == actionold.verb:
+                    actionold.verb = changeCookMethod[newCook]
+    return recipe
+    
 def ToAsianFusion(recipe):
     pass
 
