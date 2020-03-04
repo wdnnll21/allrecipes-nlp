@@ -3,6 +3,7 @@ from StepParser import Phrase, Sentence
 from RecipeX import Recipe
 from ingredients import Ingredient
 from random import randint
+from RecipeGrabber import GrabFromRemote
 
 def TransformIngredient(recipe,ingr,ingrnew):
     for action in recipe.steps:
@@ -132,6 +133,20 @@ def ToLethal(recipe):
     AddIngredient(recipe, ingrnew, "end")
 
 
+thaiAdd = [
+    (Ingredient(1, "ounce", "peanut"), "with"),
+    (Ingredient(1, "tablespoon", "chicken broth"), "with"),
+    (Ingredient(2, "teaspoons", "soy sauce"), "with"),
+    (Ingredient(1, "teaspoon", "fish sauce"), "with"),
+    (Ingredient(1, "teaspoon", "white sugar"), "with"),
+    (Ingredient(.25, "cup", "very thinly sliced fresh basil leaves"), "end"),
+
+]
+
+def ToThai(recipe):
+    for ingredient, timing in thaiAdd:
+        AddIngredient(recipe, ingredient, timing)
+
 def ToAsianFusion(recipe):
     pass
 
@@ -141,3 +156,7 @@ def ToBBQ(recipe):
 def ToSandwich(recipe):
     pass
 
+
+# rec = GrabFromRemote("https://www.allrecipes.com/recipe/278271/")
+# ToThai(rec)
+# print(rec)
