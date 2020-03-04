@@ -55,13 +55,14 @@ def grab_steps(steps):
 
     return []
 
-rec = GrabFromRemote("https://www.allrecipes.com/recipe/262174")
+#rec = GrabFromRemote("https://www.allrecipes.com/recipe/262174")
 
-print([str(ingredient) for ingredient in rec.ingredients])
-rec.change_servings(.1)
-print([str(ingredient) for ingredient in rec.ingredients])
-rec.change_servings(20)
-print([str(ingredient) for ingredient in rec.ingredients])
+#print([str(ingredient) for ingredient in rec.ingredients])
+#rec.change_servings(2)
+#print([str(ingredient) for ingredient in rec.ingredients])
+#rec.change_servings(1/8)
+#print([str(ingredient) for ingredient in rec.ingredients])
+
 
 
 

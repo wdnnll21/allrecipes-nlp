@@ -10,9 +10,18 @@ class Ingredient:
         self.quantity = quantity
         self.measurement = measurement
         self.ingredient = ingredient
+        self.preparations = ""
+        self.descriptions = ""
 
-    def __str__(self):
-        return str(self.quantity) + " - " + str(self.measurement) + " - " + str(self.ingredient)
+    def __repr__(self):
+        base =  str(self.quantity) + " - " + str(self.measurement) + " - " + str(self.ingredient) if self.measurement else str(self.quantity) + " - " + str(self.ingredient)
+        if self.quantity == 0:
+            base = self.ingredient
+        if self.descriptions != "":
+            base += "  (Descriptions: " + self.descriptions + ")"
+        if self.preparations != "":
+            base += "  (Preparations: " + self.preparations + ")"
+        return base
 
     def multiply_quantity(self, multiplier):
         if self.quantity != 0:

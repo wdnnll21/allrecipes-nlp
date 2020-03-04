@@ -6,29 +6,29 @@ from VerbMap import verbMap,toolMap,aprimary
 
 nlp = spacy.load('en_core_web_sm')
 
-rec = GrabFromRemote("https://www.allrecipes.com/recipe/278271/air-fryer-stuffed-mushrooms/")
+#rec = GrabFromRemote("https://www.allrecipes.com/recipe/278271/air-fryer-stuffed-mushrooms/")
 
 class Phrase(object):
     def __init__(self,verb):
         self.verb = verb
-        self.typ = None
+        self.typ = ""
         self.objects = []
         self.preps = []
         self.tools = []
         self.ingrs = []
 
     def __str__(self):
-        return "Method: " + self.verb.text + "; Type: " + self.typ + "; Tools: " + str(self.tools) + "; Ingredients: " + str(self.ingrs) +"\n\t"+self.getStep()
+        return "Method: " + str(self.verb) + "; Type: " + self.typ + "; Tools: " + str(self.tools) + "; Ingredients: " + str(self.ingrs) +"\n\t"+self.getStep()
 
     def getStep(self):
-        objects = ", ".join([x.text for x in self.objects])
+        objects = ", ".join([str(x) for x in self.objects])
         preptext = []
         for a in self.preps:
             for b in a:
                 if b not in preptext:
                     preptext.append(b)
-        preps = " ".join([x.text for x in preptext])
-        return self.verb.text + " " +  objects + " " + preps
+        preps = " ".join([str(x) for x in preptext])
+        return str(self.verb) + " " +  objects + " " + preps
 
 class Sentence(object):
     def __init__(self, text):
@@ -92,6 +92,7 @@ class Sentence(object):
 
 def basicActions(recipe):
     basic = []
+    DiscoverDescriptor(recipe)
     for step in recipe.directions:
         sbreak = []
         for sentence in step:
@@ -151,16 +152,25 @@ def ActionMachine(recipe):
                         if wordx.lower_ not in act.ingrs:
                             act.ingrs.append(wordx.lower_)
                 
-    for step in basic:
+    """for step in basic:
         for sentence in step:
             for act in sentence.phrases:
-                print(act)
+                print(act)"""
 
     recipe.steps = actionList
     recipe.pm = PrimaryMethod(recipe,actionList)
     recipe.tools =  tools
 
     return recipe
+
+def DiscoverDescriptor(recipe):
+    for ingredient in recipe.ingredients:
+        x = nlp(ingredient.ingredient)
+        for word in x:
+            if word.pos_ in ["ADJ","ADV"]:
+                ingredient.descriptions += word.text + " "
+            elif word.tag_ in ["VBN","VBD"] or word.lower_ in ["ground"]:
+                ingredient.preparations += word.text + " "
                     
 def PrimaryMethod(recipe,actionList):
     titleverbs = re.findall(re.compile("[A-Za-z]*ed"), recipe.title)
@@ -174,7 +184,7 @@ def PrimaryMethod(recipe,actionList):
     candidates = []
     for action in actionList:
         if action.verb.lemma_.lower() not in aprimary and action.typ == "Cook":
-            return action
+            return action.verb.lemma_
         elif action.verb.lemma_.lower() not in aprimary:
             candidates.append(action.verb.lemma_)
 
@@ -229,4 +239,4 @@ def toolFinder(actions):
             if word.dep_ == "pobj" and word.text.lower() in ["with","into","in"]:
                 pobjs.append(word.text)
 
-ActionMachine(rec)
+#ActionMachine(rec)
