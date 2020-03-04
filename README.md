@@ -8,4 +8,4 @@ How to Use:
 Features:
 Recipe Parsing: Ingredients (+ Quantities, Measurements, Descriptors, and Preparations), Steps, Tools, Primary Method.
 
-Recipe Transformations: Take any recipe and convert it To and From Vegetarian, To and From "Healthy" (Beware From Healthy), To American Cuisine, To Indian Cuisine, To Thai Cuisine, or Double/Half It.  
+Recipe Transformations: Take any recipe and convert it To and From Vegetarian, To and From "Healthy", To Indian Cuisine, To Thai Cuisine, Double/Half It, or convert it to an Analogous Cooking Method. You can also ask it to Sandwich a recipe. Beware of the To American Cuisine and Lethal transformations, also included.
