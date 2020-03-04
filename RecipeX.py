@@ -21,6 +21,12 @@ class Recipe(object):
     def change_servings(self, multiplier):
         for ingredient in self.ingredients:
             ingredient.multiply_quantity(multiplier)
+
+    def halve(self):
+        self.change_servings(.5)
+
+    def double(self):
+        self.change_servings(2)
     
     def __repr__(self):
         return f""" 
