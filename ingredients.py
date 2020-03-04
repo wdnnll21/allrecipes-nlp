@@ -1,4 +1,7 @@
 import fractions
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
 
 
 class Ingredient:
@@ -23,21 +26,51 @@ class Ingredient:
     def multiply_quantity(self, multiplier):
         if self.quantity != 0:
             old_quantity = self.quantity
-            self.quantity = multiplier*old_quantity
+            self.quantity = round(multiplier*old_quantity,2)
             if self.measurement:
                 if old_quantity <= 1 < self.quantity:
-                    self.measurement += "s"
-                elif old_quantity > 1 >= self.quantity and self.measurement[-1] == "s":
-                    self.measurement = self.measurement[:-1]
+                    self.measurement = self.make_plural(self.measurement)
+                elif old_quantity > 1 >= self.quantity:
+                    self.measurement = self.make_singular(self.measurement)
             else:
-                ingredient = self.ingredient.split()
-                print(ingredient)
                 if old_quantity <= 1 < self.quantity:
-                    ingredient[0] += "s"
-                elif old_quantity > 1 >= self.quantity and ingredient[0][-1] == "s":
-                    ingredient[0] = ingredient[0][:-1]
-                self.ingredient = ' '.join(ingredient)
+                    self.ingredient = self.change_plural_singular(self.ingredient, True)
+                elif old_quantity > 1 >= self.quantity:
+                    self.ingredient = self.change_plural_singular(self.ingredient, False)
 
+    def change_plural_singular(self, phrase, plural):
+        doc = nlp(phrase)
+        i = 0
+        while i < len(doc) and doc[i].pos_ != "NOUN" and doc[i].pos_ != "PROPN":
+            print(doc[i].text, doc[i].pos_)
+            i += 1
+
+        if i < len(doc):
+            if plural:
+                new_word = self.make_plural(doc[i].text)
+            else:
+                new_word = self.make_singular(doc[i].text)
+        j = 0
+        res = ""
+        for token in doc:
+            if j == i:
+                res += new_word + " "
+            else:
+                res += token.text + " "
+            j += 1
+        return res[:-1]
+
+    @staticmethod
+    def make_plural(word):
+        if word[-1] != "s":
+            word += "s"
+        return word
+
+    @staticmethod
+    def make_singular(word):
+        if word[-1] == "s":
+            word = word[:-1]
+        return word
 
 
 def get_ingredient(ingredient_text):

@@ -49,3 +49,7 @@ vegToMeat = {
     "textured vegetable protein": "lamb",
     "tvp": "lamb"
 }
+
+toThai = {
+
+}

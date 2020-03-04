@@ -4,6 +4,7 @@ from RecipeX import Recipe
 from ingredients import Ingredient
 from random import randint
 import spacy
+from RecipeGrabber import GrabFromRemote
 
 class FakePrep(object):
     def __init__(self,text,pos,idx):
@@ -169,6 +170,20 @@ def HalfIt(recipe):
     return recipe
 
 
+thaiAdd = [
+    (Ingredient(1, "ounce", "peanut"), "with"),
+    (Ingredient(1, "tablespoon", "chicken broth"), "with"),
+    (Ingredient(2, "teaspoons", "soy sauce"), "with"),
+    (Ingredient(1, "teaspoon", "fish sauce"), "with"),
+    (Ingredient(1, "teaspoon", "white sugar"), "with"),
+    (Ingredient(.25, "cup", "very thinly sliced fresh basil leaves"), "end"),
+
+]
+
+def ToThai(recipe):
+    for ingredient, timing in thaiAdd:
+        AddIngredient(recipe, ingredient, timing)
+
 def ToAsianFusion(recipe):
     pass
 
@@ -178,3 +193,7 @@ def ToBBQ(recipe):
 def ToSandwich(recipe):
     pass
 
+
+# rec = GrabFromRemote("https://www.allrecipes.com/recipe/278271/")
+# ToThai(rec)
+# print(rec)
