@@ -24,7 +24,7 @@ def TransformIngredient(recipe,ingr,ingrnew):
             if oldingr in ingr.ingredient:
                 action.ingrs[action.ingrs.index(oldingr)] = ingrnew.ingredient
                 for oldobj in action.objects:
-                    if oldobj.text in ingr.ingredient:
+                    if str(oldobj) in ingr.ingredient:
                         oldobj = ingrnew.ingredient
                 newpreps = []
                 for prepphrase in action.preps:
@@ -40,11 +40,15 @@ def TransformIngredient(recipe,ingr,ingrnew):
 def AddIngredient(recipe, ingr, when):
     recipe.ingredients.append(ingr)
     if when == "with":
+        combined = False
         for action in recipe.steps:
             if action.typ == "Combine":
                 action.ingrs.append(ingr.ingredient)
                 action.objects.append(ingr.ingredient)
+                combined = True
                 break
+        if not combined:
+            AddIngredient(recipe,ingr,"before")
     elif when == "none":
         "Hello"
     else:
@@ -59,18 +63,26 @@ def AddAction(recipe, when, action):
         recipe.steps.insert(0,action)
     if when == "before":
         i = 0
-        for action in recipe.steps:
-            if action.typ == "Cook":
+        inserted = False
+        for actionz in recipe.steps:
+            if actionz.typ == "Cook":
                 recipe.steps.insert(i,action)
+                inserted = True
                 break
             i+=1
+        if not inserted:
+            AddAction(recipe,"begin",action)
     if when == "after":
         i = 0
-        for action in recipe.steps:
-            if action.typ == "Cook":
+        insert = False
+        for actionz in recipe.steps:
+            if actionz.typ == "Cook":
                 recipe.steps.insert(i+1,action)
+                insert = True
                 break
             i+=1
+        if not insert:
+            AddAction(recipe,"end",action)
     if when == "end":
         recipe.steps.append(action)
 
@@ -103,9 +115,14 @@ def FromVegetarian(recipe):
     return recipe
 
 def ToHealthy(recipe):
+    unhealthy = ["bacon","tater tots","marshmellow","hot dog","corn syrup","margarine","mayonnaise","freedom","guns","butter","liberty"]
+
     ph = Phrase("trim")
     ph.type = "Prepare"
     for ingr in recipe.ingredients:
+        if any(unhealth in ingr.ingredient for unhealth in unhealthy):
+            recipe.ingredients.remove(ingr)
+            continue
         if any(meat in ingr.ingredient for meat in meatToVeg):
             ph.objects.append(ingr.ingredient)
             ph.ingrs.append(ingr.ingredient)
@@ -113,11 +130,12 @@ def ToHealthy(recipe):
             ingr.quantity /= 3
         if "salt" in ingr.ingredient and "salted" not in ingr.ingredient:
             TransformIngredient(recipe,ingr,Ingredient(ingr.quantity,ingr.measurement,"onion powder"))
+        
     if len(ph.objects) > 0:
         AddAction(recipe,"begin",ph)
 
     healthy = ["spinach","onion","zucchini","kale","oats","quinoa","green beans","whole cucumber","arugula head"]
-    AddIngredient(Ingrdient(0,"",healthy[randint(0,8)] + "to taste"),"before")
+    AddIngredient(recipe,Ingredient(0,"",healthy[randint(0,8)] + " to taste"),"before")
 
     return recipe
 
@@ -144,6 +162,7 @@ def FromHealthy(recipe):
         ph.typ = "Cook"
         ph.objects.append("everything")
         AddAction(recipe,"end",ph)
+        recipe.pm = "deep fry"
     
     AddIngredient(recipe,Ingredient(50,None,'french fries'),"none")
     ph = Phrase("serve")
@@ -156,11 +175,12 @@ def FromHealthy(recipe):
     
 def ToAmerican(recipe): 
     recipe = FromHealthy(recipe)
+    recipe.pm = "artery-clog"
     americanAdd = [
         (Ingredient(1, "ounce", "freedom"), "with"),
         (Ingredient(100, "gallons", "liberty"), "with"),
-        (Ingredient(1, 'pair', 'of guns'), "with"),
-        (Ingredient(10, "kg" "butter"), "with"),
+        (Ingredient(1, 'pair of', 'guns'), "with"),
+        (Ingredient(10, "kg", "butter"), "with"),
     ]
     for ingredient, timing in americanAdd:
         AddIngredient(recipe, ingredient, timing)
@@ -174,6 +194,7 @@ def ToLethal(recipe):
     print("\nSPONSORED: This transformation is brought to you by Clorox® Liquid Bleach.")
     ingrnew = Ingredient(2,"gallon","bleach")
     AddIngredient(recipe, ingrnew, "end")
+    recipe.pm = "poison"
     
     return recipe
 
@@ -212,40 +233,39 @@ def ToThai(recipe):
     return recipe
 
 def ToIndian(recipe): 
-    beef = False
     for ingredient in recipe.ingredients:
         for meatReplacement in toIndian:
             if meatReplacement in ingredient.ingredient:
                 ingrnew = Ingredient(
                     ingredient.quantity, ingredient.measurement, toIndian[meatReplacement])
                 TransformIngredient(recipe, ingredient, ingrnew)
-                beef = True
-    if not beef:
-        meat = list(toIndian)[randint(0, len(toIndian))]
-        AddIngredient(recipe, Ingredient(4, "ounces", meat), "with")
-    AddIngredient(recipe, Ingredient(1/2, "tablespoon", "curry"))
-    AddIngredient(recipe, Ingredient(1, "teaspoon", "coriander"))
-    AddIngredient(recipe, Ingredient(1, "teaspoon", "cumin"))
-    AddIngredient(recipe, Ingredient(1, "teaspoon", "cayenne"))
-    AddIngredient(recipe, Ingredient(1, "teaspoon", "turmeric"))
+    AddIngredient(recipe, Ingredient(1/2, "tablespoon", "curry"),"with")
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "coriander"),"with")
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "cumin"),"with")
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "cayenne"),"with")
+    AddIngredient(recipe, Ingredient(1, "teaspoon", "turmeric"),"with")
+    recipe.pm = "curry"
     return recipe
     
 def randomizeCookMethod(recipe): 
     for actionold in recipe.steps:
         if actionold.typ == "Cook":
             for newCook in changeCookMethod:
-                if newCook == actionold.verb:
+                if newCook == str(actionold.verb):
                     actionold.verb = changeCookMethod[newCook]
+                    recipe.pm = changeCookMethod[newCook]
     return recipe
-    
-def ToAsianFusion(recipe):
-    pass
-
-def ToBBQ(recipe):
-    pass
 
 def ToSandwich(recipe):
-    pass
+    AddIngredient(recipe,Ingredient(2,"slices","white bread"),"none")
+    ph = Phrase("Place")
+    ph.preps.append([FakePrep("from this meal between white bread","NOUN",980)])
+    ph.objects.append("leftovers")
+    ph.ingrs.append("white bread")
+
+    AddAction(recipe,"end",ph)
+    recipe.pm = "sandwich"
+    return recipe
 
 
 # rec = GrabFromRemote("https://www.allrecipes.com/recipe/278271/")

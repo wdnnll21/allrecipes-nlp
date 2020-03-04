@@ -47,7 +47,8 @@ vegToMeat = {
     "chickpeas": "crab",
     "heart of palm": "squid",
     "textured vegetable protein": "lamb",
-    "tvp": "lamb"
+    "tvp": "lamb",
+    "portobello":"steak"
 }
 
 toIndian = {

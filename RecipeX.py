@@ -37,8 +37,8 @@ class Recipe(object):
 ** Ingredients: **\n {ingreds} \n
 ** Parsed Steps: **\n {dirs} \n
 ** Primary Method: {self.pm} **\n
-** Tools: {", ".join(self.tools)} **\n
-** Notes: {", ".join(self.notes)} **\n
+** Tools: {", ".join(list(set(self.tools)))} **\n
+** Notes: {self.notes} **\n
 ** Timing: {", ".join(self.timing)} **\n\n"""
 
 
